@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: platforms-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: platforms
+  template:
+    metadata:
+      labels:
+        app: platforms
+    spec:
+      containers:
+      - name: platforms
+        image: arnoldskhu/platforms:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: platforms-clusterip-drv
+spec:
+  type: ClusterIP
+  selector:
+    app: platforms
+  ports:
+  - name: platforms
+    protocol: TCP
+    port: 80
+    targetPort: 80
