@@ -12,7 +12,13 @@ builder.Services.AddSwaggerGen();
 if (builder.Environment.IsProduction())
 {
     Console.WriteLine("Starting using SQL-Server Kubernetes Database");
-    builder.Services.AddDbContext<AppDbContext>(opt =>opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn")));
+    // builder.Services.AddDbContext<AppDbContext>(opt =>opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConn")));
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+    opt.UseSqlServer(
+        builder.Configuration.GetConnectionString("PlatformsConn"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+    )
+);
 }else{
     Console.WriteLine("Starting using In-Memory Database");
     builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
